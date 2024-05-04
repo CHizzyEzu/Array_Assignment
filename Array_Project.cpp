@@ -8,118 +8,141 @@
 #include <ctime>
 using namespace std;
 
+// Global Variables
+const int SIZE = 50;
+int numbers[SIZE];
+int c = 0;
+
+// Array printing format function
 int formatArray(int format)
 {
+// Prints 5 values per row 10 times
     for (int c = 0; c < SIZE; c++);
-        cout << numbers[SIZE] << " ";
-        if (int c = 5 % 0 )
+    { cout << numbers[c] << " ";
+        if ((SIZE + 1) % format == 0)
         {
             cout << "\n";
         }
-    
-    for (int val : numbers)
-    cout << " Here are the numbers for the array: " << val << endl;
-
+    }
+    cout << endl;
     return format;
 }
 
-int lowValue(int min)
+// Lowest array value function
+int lowValue()
 {
-    int count;
-    int lowest;
-    lowest = numbers[0];
 
-    for (count = 1; count < SIZE; count++)
+    int lowest = numbers[0];
+
+    for (int c = 1; c < SIZE; c++)
     {
-        if (numbers [count] < lowest)
-        lowest = numbers[count];
+        if (numbers [c] < lowest)
+        {
+            lowest = numbers[c];
+        }
     }
-
-    return min;
+    return lowest;
 }
-
-int highValue(int max)
+// Highest array value function
+int highValue()
 {
-    int count;
-    int highest;
-    highest = numbers[0];
     
-    for (count = 1; count < SIZE; count++)
+    int highest = numbers[0];
+    
+    for (int c = 1; c < SIZE; c++)
     {
-        if (numbers[count] > highest)
-        highest = numbers[count];
-
-        return max;
+        if (numbers[c] > highest)
+        {
+            highest = numbers[c];
+        }
+        
+        return highest;
     }
 }
 
-int randoms(int random_numbers)
-
+int sumArray()
 {
-    int random_numbers;
-
-    const int MIN_VALUE = -75;
-    const int MAX_VALUE = 200;
-
-    unsigned seed = time(0);
-
-    srand(seed);
-
-    random_numbers = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE;
-
-    return random_numbers;
+    int sum = 0;
+    for (int c = 0; c < SIZE; c++) 
+    {
+        sum += numbers[c];
+    }
+    return sum;
 }
 
-void showArray(int [], int); // Function prototype
+void printArray(int format, ostream& out)
+{
+    for (int c = 0; c < SIZE; c++)
+    {
+        out << numbers[c] << " ";
+        if ((c + 1) % format == 0)
+        {
+            cout << endl;
+        }
+    }
+}
 
-const int SIZE = 50;
-int numbers [50];
+// random number generation function
+void fillArray(int min, int max)
+{
+    srand(time(nullptr));
+    for(int c = 0; c < SIZE; c++)
+    {
+        numbers[c] = rand() % (max - min + 1) + min;
+    }
 
-
+}
 
 int main()
 {
-    const int SIZE = 50;
-    int numbers [SIZE];
-
-    double average, sum = 0;
-
-    int min, max, format, random_numbers = 0;
-
+// Initilaized variables in main
     string fileName;
 
+    int min = -75, max = 200;
+    int sum, format = 5;
+    double average;
+    int c = 0;
+
+// User prompted to type file name
     cout << " Enter the name of the file: ";
     getline(cin >> ws, fileName);
 
+/* The array is filled with 50 random numbers that identifies
+    the mininum and maximum array values*/
+    fillArray(min, max);
+
+    cout << "Array Values: " << endl;
+    printArray(format, cout);
+
+// Code is being printed to a .txt file
     std::ofstream outputFile;
     outputFile.open(fileName + ".txt");
 
-// Array Values
-    for(int &val : numbers)
-    cout << "Array numbers are as follows: ";
-    cout << randoms(random_numbers);
+    if(outputFile.is_open())
+    {
+        cout << "Array Values: (" << fileName << ".txt):" << endl;
+        printArray(format, cout);
+    }
+    else
+    {
+        cout << "Unable to open file." << endl;
+    }
 
-// Calculating total of all array numbers and averaging them
-    for(int count = 0; count <= SIZE; count++)
-        sum +=  numbers[SIZE];
-
-    average = sum / SIZE;
-
-
-// Pinting Aray element by element
-    for(int i = 0; i < SIZE; i++)
-    cout << numbers[i] << endl;
-
+// Sum function of array values and average calculated
+    sum = sumArray();
+    average = static_cast<double>(sum) / SIZE;
 
 // Outputting Array to terminal
-    cout << "Array Values: " << formatArray(format) << endl;
-    cout << "Minimum Array Value: " << lowValue(min) << endl;
-    cout << "Maximum Array Value: " << highValue(max) << endl;
+    cout << "Minimum Array Value: " << lowValue() << endl;
+    cout << "Maximum Array Value: " << highValue() << endl;
+    cout << "Sum of Array Values: " << sum << endl;
+    cout << "Average of Array Values: " << fixed << setprecision(2) << average << endl;
 
 // Writting to text file
-    outputFile << "Array Values: " << formatArray(format) << endl;
-    outputFile << "Minimum Array Value: " << lowValue(min) << endl;
-    outputFile << "Maximum Array Value: " << highValue(max) << endl;
+    outputFile << "Minimum Array Value: " << lowValue() << endl;
+    outputFile << "Maximum Array Value: " << highValue() << endl;
+    outputFile << "Sum of Array Values: " << sum << endl;
+    outputFile << "Average of Array Values: " << fixed << setprecision(2) << average << endl;
 
     outputFile.close();
 
